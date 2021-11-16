@@ -16,7 +16,7 @@ public class HotelReservationSystem {
         boolean isExit = false;
         while (!isExit){
             Hotel hotel = new Hotel();
-            System.out.println("Enter \n1.Add Hotel \n3.Exit");
+            System.out.println("Enter \n1.Add Hotel \n2.Exit");
             int choice = sc.nextInt();
             sc.nextLine();
             if (choice == 1) {
@@ -54,23 +54,34 @@ public class HotelReservationSystem {
     }
 
     /**
-     * This method is used to calculate prices of the hotel
-     * @param entry used for iterating map entry
-     * @return total hotel price
+     * This method is used to find the best rating hotel
      */
-    public int calculateHotelPrice(Map.Entry<String,Hotel> entry){
+    public void bestRatedHotel(){
+        int bestRated = 0;
+        String bestRatedHotelName = "";
+        int hotelPrice;
+        int bestHotelPrice = 0;
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the days of the week");
         String day = sc.nextLine().toLowerCase(Locale.ROOT);
         String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
-        if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
-             return entry.getValue().getWeekendRegularRate() * 2;
-        } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
-                || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
-           return entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
-        } else {
-            return entry.getValue().getWeekdayRegularRate() * 2;
+        for(Map.Entry<String,Hotel>entry : hotels.entrySet()){
+            if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
+                hotelPrice = entry.getValue().getWeekendRegularRate() * 2;
+            } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
+                    || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
+                hotelPrice = entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
+            } else {
+                hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
+            }
+            int updateBestRated = entry.getValue().getRating();
+            if(updateBestRated>bestRated){
+                bestRated = updateBestRated;
+                bestRatedHotelName = entry.getValue().getHotelName();
+                bestHotelPrice = hotelPrice;
+            }
         }
+        System.out.println("Best rated hotel : "+bestRatedHotelName+" Total rate : $"+bestHotelPrice);
     }
 
     /**
@@ -83,8 +94,19 @@ public class HotelReservationSystem {
         int cheapHotelPrice = Integer.MAX_VALUE;
         int hotelPrice;
         if (isDateValid()) {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter the days of the week");
+            String day = sc.nextLine().toLowerCase(Locale.ROOT);
+            String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
             for (Map.Entry<String, Hotel> entry : hotels.entrySet()) {
-                hotelPrice = calculateHotelPrice(entry);
+                if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
+                    hotelPrice = entry.getValue().getWeekendRegularRate() * 2;
+                } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
+                        || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
+                    hotelPrice = entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
+                } else {
+                    hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
+                }
                 if (hotelPrice < cheapHotelPrice) {
                     cheapHotelPrice = hotelPrice;
                     cheapHotelsList = new ArrayList<>();
@@ -112,5 +134,6 @@ public class HotelReservationSystem {
         HotelReservationSystem hotelObj = new HotelReservationSystem();
         hotelObj.addHotel();
         hotelObj.findCheapestHotel();
+        hotelObj.bestRatedHotel();
     }
 }
