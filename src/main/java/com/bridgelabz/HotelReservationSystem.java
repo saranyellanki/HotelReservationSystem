@@ -49,13 +49,9 @@ public class HotelReservationSystem {
      * This method contains a regular expression which validates date
      * @return true if matches else false
      */
-    public boolean isDateValid() {
-        Scanner sc = new Scanner(System.in);
+    public boolean isDateValid(String date, String date1) {
         String regex = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$";
         Pattern pattern = Pattern.compile(regex);
-        System.out.println("Enter your dates in the format dd/mm/yyyy,example-10Sep2020");
-        String date = sc.nextLine();
-        String date1 = sc.nextLine();
         Matcher matcher = pattern.matcher(date);
         Matcher matcher1 = pattern.matcher(date1);
         return matcher.matches() && matcher1.matches();
@@ -69,18 +65,27 @@ public class HotelReservationSystem {
         String bestRatedHotelName = "";
         int hotelPrice;
         int bestHotelPrice = 0;
+        String date;
+        String date1;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the days of the week");
-        String day = sc.nextLine().toLowerCase(Locale.ROOT);
-        String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
+        while (true) {
+            System.out.println("Enter the date to check the week day of the date in yyyy-mm-dd format,example-2012-12-20");
+            date = sc.nextLine();
+            date1 = sc.nextLine();
+            if(isDateValid(date,date1)){
+                break;
+            }else System.out.println("Incorrect format");
+        }
+        DayOfWeek day = LocalDate.parse(date).getDayOfWeek();
+        DayOfWeek day1 = LocalDate.parse(date1).getDayOfWeek();
         for(Map.Entry<String,Hotel>entry : hotels.entrySet()){
-            if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
-                hotelPrice = entry.getValue().getWeekendRegularRate() * 2;
-            } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
-                    || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
-                hotelPrice = entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
+            if (day.equals(DayOfWeek.SUNDAY) && day1.equals(DayOfWeek.SATURDAY) || day1.equals(DayOfWeek.SUNDAY) && day.equals(DayOfWeek.SATURDAY)) {
+                hotelPrice = entry.getValue().getWeekendRewardRate() * 2;
+            } else if (day.equals(DayOfWeek.MONDAY) && day1.equals(DayOfWeek.SUNDAY) || day1.equals(DayOfWeek.MONDAY) && day.equals(DayOfWeek.SUNDAY)
+                    || day.equals(DayOfWeek.SATURDAY) && day1.equals(DayOfWeek.FRIDAY) || day1.equals(DayOfWeek.SATURDAY) && day.equals(DayOfWeek.FRIDAY)) {
+                hotelPrice = entry.getValue().getWeekdayRewardRate() + entry.getValue().getWeekendRewardRate();
             } else {
-                hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
+                hotelPrice = entry.getValue().getWeekdayRewardRate() * 2;
             }
             int updateBestRated = entry.getValue().getRating();
             if(updateBestRated>bestRated){
@@ -101,38 +106,44 @@ public class HotelReservationSystem {
         ArrayList<Hotel> cheapHotelsList = new ArrayList<>();
         int cheapHotelPrice = Integer.MAX_VALUE;
         int hotelPrice;
-        if (isDateValid()) {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Enter the days of the week");
-            String day = sc.nextLine().toLowerCase(Locale.ROOT);
-            String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
-            for (Map.Entry<String, Hotel> entry : hotels.entrySet()) {
-                if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
-                    hotelPrice = entry.getValue().getWeekendRegularRate() * 2;
-                } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
-                        || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
-                    hotelPrice = entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
-                } else {
-                    hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
-                }
-                if (hotelPrice < cheapHotelPrice) {
-                    cheapHotelPrice = hotelPrice;
-                    cheapHotelsList = new ArrayList<>();
-                    cheapHotelsList.add(entry.getValue());
-                }
-                else if(cheapHotelPrice==hotelPrice){
-                    cheapHotelsList.add(entry.getValue());
-                }
+        String date;
+        String date1;
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("Enter the date to check the week day of the date in yyyy-mm-dd format,example-2012-12-20");
+            date = sc.nextLine();
+            date1 = sc.nextLine();
+            if(isDateValid(date,date1)){
+                break;
+            }else System.out.println("Incorrect format");
+        }
+        DayOfWeek day = LocalDate.parse(date).getDayOfWeek();
+        DayOfWeek day1 = LocalDate.parse(date1).getDayOfWeek();
+        for (Map.Entry<String, Hotel> entry : hotels.entrySet()) {
+            if (day.equals(DayOfWeek.SUNDAY) && day1.equals(DayOfWeek.SATURDAY) || day1.equals(DayOfWeek.SUNDAY) && day.equals(DayOfWeek.SATURDAY)) {
+                hotelPrice = entry.getValue().getWeekendRegularRate() * 2;
+            } else if (day.equals(DayOfWeek.MONDAY) && day1.equals(DayOfWeek.SUNDAY) || day1.equals(DayOfWeek.MONDAY) && day.equals(DayOfWeek.SUNDAY)
+                    || day.equals(DayOfWeek.SATURDAY) && day1.equals(DayOfWeek.FRIDAY) || day1.equals(DayOfWeek.SATURDAY) && day.equals(DayOfWeek.FRIDAY)) {
+                hotelPrice = entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
+            } else {
+                hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
             }
-            Collections.sort(cheapHotelsList);
-            int rating = cheapHotelsList.get(0).getRating();
-            for(Hotel hotel : cheapHotelsList){
-                if(rating==hotel.getRating()) {
-                    System.out.println("Hotel name :"+hotel.getHotelName()+" Rating : "+hotel.rating+
-                            " Total Rate : $"+cheapHotelPrice);
-                }
+            if (hotelPrice < cheapHotelPrice) {
+                cheapHotelPrice = hotelPrice;
+                cheapHotelsList = new ArrayList<>();
+                cheapHotelsList.add(entry.getValue());
+            } else if (cheapHotelPrice == hotelPrice) {
+                cheapHotelsList.add(entry.getValue());
             }
-        } else System.out.println("Entered dates are invalid");
+        }
+        Collections.sort(cheapHotelsList);
+        int rating = cheapHotelsList.get(0).getRating();
+        for (Hotel hotel : cheapHotelsList) {
+            if (rating == hotel.getRating()) {
+                System.out.println("Hotel name :" + hotel.getHotelName() + " Rating : " + hotel.rating +
+                        " Total Rate : $" + cheapHotelPrice);
+            }
+        }
     }
 
     /**
@@ -143,10 +154,19 @@ public class HotelReservationSystem {
         String bestRatedHotelName = "";
         int hotelPrice;
         int bestHotelPrice = 0;
+        String date;
+        String date1;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the date to check the week day of the date in yyyy-mm-dd format,example-2012-12-20");
-        DayOfWeek day = LocalDate.parse(sc.nextLine()).getDayOfWeek();
-        DayOfWeek day1 = LocalDate.parse(sc.nextLine()).getDayOfWeek();
+        while (true) {
+            System.out.println("Enter the date to check the week day of the date in yyyy-mm-dd format,example-2012-12-20");
+            date = sc.nextLine();
+            date1 = sc.nextLine();
+            if(isDateValid(date,date1)){
+                break;
+            }else System.out.println("Incorrect format");
+        }
+        DayOfWeek day = LocalDate.parse(date).getDayOfWeek();
+        DayOfWeek day1 = LocalDate.parse(date1).getDayOfWeek();
         for(Map.Entry<String,Hotel>entry : hotels.entrySet()){
             if (day.equals(DayOfWeek.SUNDAY) && day1.equals(DayOfWeek.SATURDAY) || day1.equals(DayOfWeek.SUNDAY) && day.equals(DayOfWeek.SATURDAY)) {
                 hotelPrice = entry.getValue().getWeekendRewardRate() * 2;
