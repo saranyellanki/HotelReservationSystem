@@ -1,14 +1,14 @@
 package com.bridgelabz;
 
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HotelReservationSystem {
     HashMap<String ,Hotel> hotels = new HashMap<>();
-    private int cheapHotelPrice;
+    private int cheapHotelPrice = Integer.MAX_VALUE;
     private String cheapHotelName;
+    private int hotelPrice;
 
     /**
      * This method is used to add hotels to hotel reservation system
@@ -64,24 +64,38 @@ public class HotelReservationSystem {
         return matcher.matches() && matcher1.matches();
     }
 
+
     /**
-     * This method finds the cheapest hotel in the given hotels by calculating
-     * regular rates and number of days
+     * This method finds the cheapest hotel in the given hotels
+     * Weekdays and weekends both are considered and total price is calculated
+     * The Cheapest hotels after total value is printed
      */
     public void findCheapestHotel() {
-        int hotelPrice = 0;
-        int numOfDays = 2;
+        String newCheapHotel = " ";
         if (isDateValid()) {
-            for (HashMap.Entry<String, Hotel> entry : hotels.entrySet()) {
-                hotelPrice = entry.getValue().weekdayRegularRate * numOfDays;
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter the days of the week");
+            String day = sc.nextLine().toLowerCase(Locale.ROOT);
+            String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
+            for (Map.Entry<String, Hotel> entry : hotels.entrySet()) {
+                if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
+                    hotelPrice = entry.getValue().weekendRegularRate * 2;
+                } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
+                        || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
+                    hotelPrice = entry.getValue().weekdayRegularRate + entry.getValue().weekendRegularRate;
+                } else {
+                    hotelPrice = entry.getValue().weekdayRegularRate * 2;
+                }
                 if (hotelPrice < cheapHotelPrice) {
                     cheapHotelPrice = hotelPrice;
                     cheapHotelName = entry.getKey();
                 }
+                if(cheapHotelPrice==hotelPrice){
+                    if(!cheapHotelName.equals(entry.getKey())) newCheapHotel = entry.getKey();
+                }
             }
-            System.out.println("Cheapest hotel name and prices are :");
-            System.out.println(cheapHotelName + " , Total Rate : $" + cheapHotelPrice);
-        }else System.out.println("Entered dates are invalid");
+            System.out.println("Hotel name : "+cheapHotelName+", "+newCheapHotel + " Total Rate : $"+cheapHotelPrice);
+        } else System.out.println("Entered dates are invalid");
     }
 
     public static void main(String[] args) {
