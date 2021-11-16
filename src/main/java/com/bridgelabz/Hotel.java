@@ -1,6 +1,6 @@
 package com.bridgelabz;
 
-public class Hotel {
+public class Hotel implements Comparable{
     protected String hotelName;
     protected int weekdayRewardRate;
     protected int weekendRewardRate;
@@ -54,5 +54,10 @@ public class Hotel {
 
     public void setWeekendRegularRate(int weekendRegularRate) {
         this.weekendRegularRate = weekendRegularRate;
+    }
+
+    @Override
+    public int compareTo(Object hotelRating) {
+        return ((Hotel)hotelRating).rating-this.rating;
     }
 }

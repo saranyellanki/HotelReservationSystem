@@ -6,10 +6,6 @@ import java.util.regex.Pattern;
 
 public class HotelReservationSystem {
     HashMap<String ,Hotel> hotels = new HashMap<>();
-    private int cheapHotelPrice = Integer.MAX_VALUE;
-    private String cheapHotelName;
-    private int hotelPrice;
-
     /**
      * This method is used to add hotels to hotel reservation system
      * Rates are added according to weekday or weekend for every hotel
@@ -20,34 +16,24 @@ public class HotelReservationSystem {
         boolean isExit = false;
         while (!isExit){
             Hotel hotel = new Hotel();
-            System.out.println("Enter \n1.Add Hotel \n2.Add Rates \n3.Exit");
+            System.out.println("Enter \n1.Add Hotel \n3.Exit");
             int choice = sc.nextInt();
             sc.nextLine();
-            switch(choice){
-                case 1 -> {
-                    System.out.println("Enter hotel name");
-                    String hotelName = sc.nextLine();
-                    hotel.setHotelName(hotelName);
-                    System.out.println("Enter hotel rating");
-                    int rating = sc.nextInt();
-                    hotel.setRating(rating);
-                    hotels.put(hotelName,hotel);
-                }
-                case 2 -> {
-                    System.out.println("Enter hotel name for which you want to add rates");
-                    String name = sc.nextLine();
-                    if(hotels.containsKey(name)){
-                        System.out.println("Enter Weekday rate");
-                        int weekdayRate = sc.nextInt();
-                        hotel.setWeekdayRegularRate(weekdayRate);
-                        System.out.println("Enter Weekend rate");
-                        int weekendRate = sc.nextInt();
-                        hotel.setWeekendRegularRate(weekendRate);
-                        hotels.put(name,hotel);
-                    }else System.out.println("Enter a valid hotel name");
-                }
-                default -> isExit = true;
-            }
+            if (choice == 1) {
+                System.out.println("Enter hotel name");
+                String hotelName = sc.nextLine();
+                hotel.setHotelName(hotelName);
+                System.out.println("Enter Weekday rate");
+                int weekdayRate = sc.nextInt();
+                hotel.setWeekdayRegularRate(weekdayRate);
+                System.out.println("Enter Weekend rate");
+                int weekendRate = sc.nextInt();
+                hotel.setWeekendRegularRate(weekendRate);
+                System.out.println("Enter hotel rating");
+                int rating = sc.nextInt();
+                hotel.setRating(rating);
+                hotels.put(hotelName, hotel);
+            } else isExit=true;
         }
     }
 
@@ -59,7 +45,7 @@ public class HotelReservationSystem {
         Scanner sc = new Scanner(System.in);
         String regex = "^[0-9]{2}[a-zA-Z]{3}[0-9]{4}$";
         Pattern pattern = Pattern.compile(regex);
-        System.out.println("Enter your dates in the format dd/mm/yyy,example-10Sep2020");
+        System.out.println("Enter your dates in the format dd/mm/yyyy,example-10Sep2020");
         String date = sc.nextLine();
         String date1 = sc.nextLine();
         Matcher matcher = pattern.matcher(date);
@@ -67,37 +53,55 @@ public class HotelReservationSystem {
         return matcher.matches() && matcher1.matches();
     }
 
+    /**
+     * This method is used to calculate prices of the hotel
+     * @param entry used for iterating map entry
+     * @return total hotel price
+     */
+    public int calculateHotelPrice(Map.Entry<String,Hotel> entry){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the days of the week");
+        String day = sc.nextLine().toLowerCase(Locale.ROOT);
+        String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
+        if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
+             return entry.getValue().getWeekendRegularRate() * 2;
+        } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
+                || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
+           return entry.getValue().getWeekdayRegularRate() + entry.getValue().getWeekendRegularRate();
+        } else {
+            return entry.getValue().getWeekdayRegularRate() * 2;
+        }
+    }
 
     /**
-     * This method finds the cheapest hotel in the given hotels
-     * Weekdays and weekends both are considered and total price is calculated
      * The Cheapest hotels after total value is printed
+     * If there are 2 cheap hotels then best rated hotel will be choosed
+     * by sorting function which compares the objects
      */
     public void findCheapestHotel() {
-        String newCheapHotel = " ";
+        ArrayList<Hotel> cheapHotelsList = new ArrayList<>();
+        int cheapHotelPrice = Integer.MAX_VALUE;
+        int hotelPrice;
         if (isDateValid()) {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Enter the days of the week");
-            String day = sc.nextLine().toLowerCase(Locale.ROOT);
-            String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
             for (Map.Entry<String, Hotel> entry : hotels.entrySet()) {
-                if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
-                    hotelPrice = entry.getValue().weekendRegularRate * 2;
-                } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
-                        || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
-                    hotelPrice = entry.getValue().weekdayRegularRate + entry.getValue().weekendRegularRate;
-                } else {
-                    hotelPrice = entry.getValue().weekdayRegularRate * 2;
-                }
+                hotelPrice = calculateHotelPrice(entry);
                 if (hotelPrice < cheapHotelPrice) {
                     cheapHotelPrice = hotelPrice;
-                    cheapHotelName = entry.getKey();
+                    cheapHotelsList = new ArrayList<>();
+                    cheapHotelsList.add(entry.getValue());
                 }
-                if(cheapHotelPrice==hotelPrice){
-                    if(!cheapHotelName.equals(entry.getKey())) newCheapHotel = entry.getKey();
+                else if(cheapHotelPrice==hotelPrice){
+                    cheapHotelsList.add(entry.getValue());
                 }
             }
-            System.out.println("Hotel name : "+cheapHotelName+", "+newCheapHotel + " Total Rate : $"+cheapHotelPrice);
+            Collections.sort(cheapHotelsList);
+            int rating = cheapHotelsList.get(0).getRating();
+            for(Hotel hotel : cheapHotelsList){
+                if(rating==hotel.getRating()) {
+                    System.out.println("Hotel name :"+hotel.getHotelName()+" Rating : "+hotel.rating+
+                            " Total Rate : $"+cheapHotelPrice);
+                }
+            }
         } else System.out.println("Entered dates are invalid");
     }
 
