@@ -28,6 +28,9 @@ public class HotelReservationSystem {
                     System.out.println("Enter hotel name");
                     String hotelName = sc.nextLine();
                     hotel.setHotelName(hotelName);
+                    System.out.println("Enter hotel rating");
+                    int rating = sc.nextInt();
+                    hotel.setRating(rating);
                     hotels.put(hotelName,hotel);
                 }
                 case 2 -> {
