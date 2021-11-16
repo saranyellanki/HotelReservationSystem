@@ -16,19 +16,24 @@ public class HotelReservationSystem {
         boolean isExit = false;
         while (!isExit){
             Hotel hotel = new Hotel();
-            System.out.println("Enter \n1.Add Hotel \n2.Exit");
+            System.out.println("Enter \n1.Add Hotel \n2.Add \n2.Exit");
             int choice = sc.nextInt();
             sc.nextLine();
             if (choice == 1) {
                 System.out.println("Enter hotel name");
                 String hotelName = sc.nextLine();
                 hotel.setHotelName(hotelName);
-                System.out.println("Enter Weekday rate");
+                System.out.println("Enter Weekday Regular rate");
                 int weekdayRate = sc.nextInt();
                 hotel.setWeekdayRegularRate(weekdayRate);
-                System.out.println("Enter Weekend rate");
+                System.out.println("Enter Weekend Regular rate");
                 int weekendRate = sc.nextInt();
-                hotel.setWeekendRegularRate(weekendRate);
+                System.out.println("Enter Weekday Reward rate");
+                int weekdayRewardRate = sc.nextInt();
+                hotel.setWeekdayRewardRate(weekdayRate);
+                System.out.println("Enter Weekend Reward rate");
+                int weekendRewardRate = sc.nextInt();
+                hotel.setWeekendRewardRate(weekendRate);
                 System.out.println("Enter hotel rating");
                 int rating = sc.nextInt();
                 hotel.setRating(rating);
