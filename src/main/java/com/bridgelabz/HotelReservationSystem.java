@@ -1,5 +1,7 @@
 package com.bridgelabz;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,7 +51,7 @@ public class HotelReservationSystem {
      */
     public boolean isDateValid() {
         Scanner sc = new Scanner(System.in);
-        String regex = "^[0-9]{2}[a-zA-Z]{3}[0-9]{4}$";
+        String regex = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$";
         Pattern pattern = Pattern.compile(regex);
         System.out.println("Enter your dates in the format dd/mm/yyyy,example-10Sep2020");
         String date = sc.nextLine();
@@ -142,14 +144,14 @@ public class HotelReservationSystem {
         int hotelPrice;
         int bestHotelPrice = 0;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the days of the week");
-        String day = sc.nextLine().toLowerCase(Locale.ROOT);
-        String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
+        System.out.println("Enter the date to check the week day of the date in yyyy-mm-dd format,example-2012-12-20");
+        DayOfWeek day = LocalDate.parse(sc.nextLine()).getDayOfWeek();
+        DayOfWeek day1 = LocalDate.parse(sc.nextLine()).getDayOfWeek();
         for(Map.Entry<String,Hotel>entry : hotels.entrySet()){
-            if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
+            if (day.equals(DayOfWeek.SUNDAY) && day1.equals(DayOfWeek.SATURDAY) || day1.equals(DayOfWeek.SUNDAY) && day.equals(DayOfWeek.SATURDAY)) {
                 hotelPrice = entry.getValue().getWeekendRewardRate() * 2;
-            } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
-                    || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
+            } else if (day.equals(DayOfWeek.MONDAY) && day1.equals(DayOfWeek.SUNDAY) || day1.equals(DayOfWeek.MONDAY) && day.equals(DayOfWeek.SUNDAY)
+                    || day.equals(DayOfWeek.SATURDAY) && day1.equals(DayOfWeek.FRIDAY) || day1.equals(DayOfWeek.SATURDAY) && day.equals(DayOfWeek.FRIDAY)) {
                 hotelPrice = entry.getValue().getWeekdayRewardRate() + entry.getValue().getWeekendRewardRate();
             } else {
                 hotelPrice = entry.getValue().getWeekdayRewardRate() * 2;
