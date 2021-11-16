@@ -16,7 +16,7 @@ public class HotelReservationSystem {
         boolean isExit = false;
         while (!isExit){
             Hotel hotel = new Hotel();
-            System.out.println("Enter \n1.Add Hotel \n2.Add \n2.Exit");
+            System.out.println("Enter \n1.Add Hotel \n2.Exit");
             int choice = sc.nextInt();
             sc.nextLine();
             if (choice == 1) {
@@ -28,12 +28,13 @@ public class HotelReservationSystem {
                 hotel.setWeekdayRegularRate(weekdayRate);
                 System.out.println("Enter Weekend Regular rate");
                 int weekendRate = sc.nextInt();
+                hotel.setWeekendRegularRate(weekendRate);
                 System.out.println("Enter Weekday Reward rate");
                 int weekdayRewardRate = sc.nextInt();
-                hotel.setWeekdayRewardRate(weekdayRate);
+                hotel.setWeekdayRewardRate(weekdayRewardRate);
                 System.out.println("Enter Weekend Reward rate");
                 int weekendRewardRate = sc.nextInt();
-                hotel.setWeekendRewardRate(weekendRate);
+                hotel.setWeekendRewardRate(weekendRewardRate);
                 System.out.println("Enter hotel rating");
                 int rating = sc.nextInt();
                 hotel.setRating(rating);
@@ -132,6 +133,37 @@ public class HotelReservationSystem {
         } else System.out.println("Entered dates are invalid");
     }
 
+    /**
+     * This method is used to find best rated hotel for reward customers
+     */
+    public void bestRewardRateHotel(){
+        int bestRated = 0;
+        String bestRatedHotelName = "";
+        int hotelPrice;
+        int bestHotelPrice = 0;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the days of the week");
+        String day = sc.nextLine().toLowerCase(Locale.ROOT);
+        String day1 = sc.nextLine().toLowerCase(Locale.ROOT);
+        for(Map.Entry<String,Hotel>entry : hotels.entrySet()){
+            if (day.equals("sun") && day1.equals("sat") || day1.equals("sun") && day.equals("sat")) {
+                hotelPrice = entry.getValue().getWeekendRewardRate() * 2;
+            } else if (day.equals("mon") && day1.equals("sun") || day1.equals("mon") && day.equals("sun")
+                    || day.equals("sat") && day1.equals("fri") || day1.equals("sat") && day.equals("fri")) {
+                hotelPrice = entry.getValue().getWeekdayRewardRate() + entry.getValue().getWeekendRewardRate();
+            } else {
+                hotelPrice = entry.getValue().getWeekdayRewardRate() * 2;
+            }
+            int updateBestRated = entry.getValue().getRating();
+            if(updateBestRated>bestRated){
+                bestRated = updateBestRated;
+                bestRatedHotelName = entry.getValue().getHotelName();
+                bestHotelPrice = hotelPrice;
+            }
+        }
+        System.out.println("Best rated hotel : "+bestRatedHotelName+" Total rate : $"+bestHotelPrice);
+    }
+
     public static void main(String[] args) {
         System.out.println("====================================");
         System.out.println("Welcome to Hotel Reservation System");
@@ -140,5 +172,6 @@ public class HotelReservationSystem {
         hotelObj.addHotel();
         hotelObj.findCheapestHotel();
         hotelObj.bestRatedHotel();
+        hotelObj.bestRewardRateHotel();
     }
 }
