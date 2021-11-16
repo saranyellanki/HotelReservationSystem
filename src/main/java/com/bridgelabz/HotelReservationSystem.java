@@ -12,6 +12,7 @@ public class HotelReservationSystem {
 
     /**
      * This method is used to add hotels to hotel reservation system
+     * Rates are added according to weekday or weekend for every hotel
      * Can add any number of hotels till he chooses Exit option
      */
     public void addHotel() {
@@ -33,9 +34,12 @@ public class HotelReservationSystem {
                     System.out.println("Enter hotel name for which you want to add rates");
                     String name = sc.nextLine();
                     if(hotels.containsKey(name)){
-                        System.out.println("Enter regular rate");
-                        int rate = sc.nextInt();
-                        hotel.setWeekdayRegularRate(rate);
+                        System.out.println("Enter Weekday rate");
+                        int weekdayRate = sc.nextInt();
+                        hotel.setWeekdayRegularRate(weekdayRate);
+                        System.out.println("Enter Weekend rate");
+                        int weekendRate = sc.nextInt();
+                        hotel.setWeekendRegularRate(weekendRate);
                         hotels.put(name,hotel);
                     }else System.out.println("Enter a valid hotel name");
                 }
