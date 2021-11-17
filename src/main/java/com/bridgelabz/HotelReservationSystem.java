@@ -61,8 +61,14 @@ public class HotelReservationSystem {
                 } else {
                     hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
                 }
+                if (hotelPrice < cheapHotelPrice) {
+                    cheapHotelPrice = hotelPrice;
+                    cheapHotelName = entry.getKey();
+                }
+                else if(cheapHotelPrice==hotelPrice){
+                    newCheapHotel = entry.getKey();
+                }
                System.out.println("Hotel name : "+cheapHotelName+", "+newCheapHotel + " Total Rate : $"+cheapHotelPrice);
-            System.out.println("Hotel name : "+cheapHotelName + " , Total Rate : $" + cheapHotelPrice);
             } 
         }else System.out.println("Entered dates are invalid");
         return cheapHotelPrice;
