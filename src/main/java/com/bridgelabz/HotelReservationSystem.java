@@ -1,42 +1,29 @@
 package com.bridgelabz;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class HotelReservationSystem {
     HashMap<String ,Hotel> hotels = new HashMap<>();
-
     /**
      * This method is used to add hotels to hotel reservation system
-     * Can add any number of hotels till he chooses Exit option
+     * with all the rates and stored in the hashmap
      */
-    public void addHotel() {
-        Scanner sc = new Scanner(System.in);
-        boolean isExit = false;
-        while (!isExit){
-            System.out.println("Enter \n1.Add Hotel \n2.Exit");
-            int choice = sc.nextInt();
-            sc.nextLine();
-            switch(choice){
-                case 1 -> {
-                    Hotel hotel = new Hotel();
-                    System.out.println("Enter hotel name");
-                    String hotelName = sc.nextLine();
-                    hotel.setHotelName(hotelName);
-                    hotels.put(hotelName, hotel);
-                }
-                default -> {
-                    isExit = true;
-                }
-            }
-        }
+    public int addHotel() {
+        Hotel hotel1 = new Hotel("LakeWood",110,90,80,
+                80,3);
+        Hotel hotel2 = new Hotel("BridgeWood",150,50,110,
+                50,4);
+        Hotel hotel3 = new Hotel("RidgeWood",220,150,100,
+                40,5);
+        hotels.put(hotel1.getHotelName(),hotel1);
+        hotels.put(hotel2.getHotelName(),hotel2);
+        hotels.put(hotel3.getHotelName(),hotel3);
+        return hotels.size();
     }
 
     public static void main(String[] args) {
         System.out.println("====================================");
         System.out.println("Welcome to Hotel Reservation System");
         System.out.println("====================================");
-        HotelReservationSystem hotelObj = new HotelReservationSystem();
-        hotelObj.addHotel();
     }
 }
