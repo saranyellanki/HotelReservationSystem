@@ -3,12 +3,12 @@ package com.bridgelabz;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HotelReservationSystem {
     HashMap<String ,Hotel> hotels = new HashMap<>();
-
     /**
      * This method is used to add hotels to hotel reservation system
      * with all the rates and stored in the hashmap
@@ -39,9 +39,10 @@ public class HotelReservationSystem {
     }
 
     /**
-     * This method finds the cheapest hotel in the given hotels
-     * Weekdays and weekends both are considered and total price is calculated
-     * The Cheapest hotels after total value is printed
+     * This method finds the cheapest hotel rate
+     * @param date is string type which takes first date from user
+     * @param date1 is string type which takes second date from user
+     * @return cheapest hotel price among the list of hotels
      */
     public int findCheapestHotel(String date,String date1) {
         String newCheapHotel = "";
@@ -60,19 +61,12 @@ public class HotelReservationSystem {
                 } else {
                     hotelPrice = entry.getValue().getWeekdayRegularRate() * 2;
                 }
-                if (hotelPrice < cheapHotelPrice) {
-                    cheapHotelPrice = hotelPrice;
-                    cheapHotelName = entry.getKey();
-                }
-                if(cheapHotelPrice==hotelPrice){
-                    if(!cheapHotelName.equals(entry.getKey())) newCheapHotel = entry.getKey();
-                }
-            }
-            System.out.println("Hotel name : "+cheapHotelName+", "+newCheapHotel + " Total Rate : $"+cheapHotelPrice);
+               System.out.println("Hotel name : "+cheapHotelName+", "+newCheapHotel + " Total Rate : $"+cheapHotelPrice);
+            System.out.println("Hotel name : "+cheapHotelName + " , Total Rate : $" + cheapHotelPrice);
         } else System.out.println("Entered dates are invalid");
         return cheapHotelPrice;
     }
-
+      
     public static void main(String[] args) {
         System.out.println("====================================");
         System.out.println("Welcome to Hotel Reservation System");
