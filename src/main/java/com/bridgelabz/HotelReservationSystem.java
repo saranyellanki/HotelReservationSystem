@@ -63,7 +63,8 @@ public class HotelReservationSystem {
                 }
                System.out.println("Hotel name : "+cheapHotelName+", "+newCheapHotel + " Total Rate : $"+cheapHotelPrice);
             System.out.println("Hotel name : "+cheapHotelName + " , Total Rate : $" + cheapHotelPrice);
-        } else System.out.println("Entered dates are invalid");
+            } 
+        }else System.out.println("Entered dates are invalid");
         return cheapHotelPrice;
     }
       
