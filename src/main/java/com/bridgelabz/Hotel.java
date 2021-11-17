@@ -2,17 +2,18 @@ package com.bridgelabz;
 
 public class Hotel {
     protected String hotelName;
-    protected int weekdayRewardRate;
-    protected int weekendRewardRate;
     protected int weekdayRegularRate;
     protected int weekendRegularRate;
+    protected int weekdayRewardRate;
+    protected int weekendRewardRate;
     protected int rating;
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
+    public Hotel(String hotelName, int weekdayRegularRate, int weekendRegularRate, int weekdayRewardRate, int weekendRewardRate, int rating) {
+        this.hotelName = hotelName;
+        this.weekdayRegularRate = weekdayRegularRate;
+        this.weekendRegularRate = weekendRegularRate;
+        this.weekdayRewardRate = weekdayRewardRate;
+        this.weekendRewardRate = weekendRewardRate;
         this.rating = rating;
     }
 
