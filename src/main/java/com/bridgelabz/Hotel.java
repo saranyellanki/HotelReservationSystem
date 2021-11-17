@@ -8,8 +8,7 @@ public class Hotel {
     protected int weekendRewardRate;
     protected int rating;
 
-    public Hotel(String hotelName, int weekdayRegularRate, int weekendRegularRate, int weekdayRewardRate,
-                 int weekendRewardRate, int rating) {
+    public Hotel(String hotelName, int weekdayRegularRate, int weekendRegularRate, int weekdayRewardRate, int weekendRewardRate, int rating) {
         this.hotelName = hotelName;
         this.weekdayRegularRate = weekdayRegularRate;
         this.weekendRegularRate = weekendRegularRate;

@@ -9,12 +9,9 @@ public class HotelReservationSystem {
      * with all the rates and stored in the hashmap
      */
     public int addHotel() {
-        Hotel hotel1 = new Hotel("LakeWood",110,90,80,
-                80,3);
-        Hotel hotel2 = new Hotel("BridgeWood",150,50,110,
-                50,4);
-        Hotel hotel3 = new Hotel("RidgeWood",220,150,100,
-                40,5);
+        Hotel hotel1 = new Hotel("LakeWood",110,90,80, 80,3);
+        Hotel hotel2 = new Hotel("BridgeWood",150,50,110, 50,4);
+        Hotel hotel3 = new Hotel("RidgeWood",220,150,100, 40,5);
         hotels.put(hotel1.getHotelName(),hotel1);
         hotels.put(hotel2.getHotelName(),hotel2);
         hotels.put(hotel3.getHotelName(),hotel3);
