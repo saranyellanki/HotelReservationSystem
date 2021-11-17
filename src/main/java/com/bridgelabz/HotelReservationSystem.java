@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HotelReservationSystem {
-    HashMap<String, Hotel> hotels = new HashMap<>();
+    HashMap<String ,Hotel> hotels = new HashMap<>();
     private String cheapHotelName;
 
     /**
