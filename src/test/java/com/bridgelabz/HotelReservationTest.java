@@ -15,4 +15,7 @@ public class HotelReservationTest {
         hotel.addHotel();
         Assert.assertEquals(140,hotel.findCheapestRewardHotel("2020-09-11","2020-09-12"));
     }
-}
+    @Test
+    public void givenIsValidDateWhenAddedShouldReturnBoolean(){
+        Assert.assertTrue(hotel.isDateValid("2020-09-11","2020-09-12"));
+    }}
