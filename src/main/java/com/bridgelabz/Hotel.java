@@ -1,12 +1,12 @@
 package com.bridgelabz;
 
 public class Hotel implements Comparable{
-    protected String hotelName;
-    protected int weekdayRegularRate;
-    protected int weekendRegularRate;
-    protected int weekdayRewardRate;
-    protected int weekendRewardRate;
-    protected int rating;
+    private String hotelName;
+    private int weekdayRegularRate;
+    private int weekendRegularRate;
+    private int weekdayRewardRate;
+    private int weekendRewardRate;
+    private int rating;
 
     public Hotel(String hotelName, int weekdayRegularRate, int weekendRegularRate, int weekdayRewardRate, int weekendRewardRate, int rating) {
         this.hotelName = hotelName;
@@ -18,6 +18,9 @@ public class Hotel implements Comparable{
     }
     public int getRating() {
         return rating;
+    }
+    public void setRating(int rating) {
+        this.rating = rating;
     }
     public String getHotelName() {
         return hotelName;
